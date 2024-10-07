@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                  Int                   @id @unique @default(autoincrement()) @db.UnsignedInt
+  UUID                String                @unique @default(uuid())
+  userName            String
+  Email               String                @unique()
+  password            String
+  dob                 DateTime?             @db.Timestamp()
+  createdAt           DateTime              @default(now()) @db.Timestamp()
+  modifiedAt          DateTime              @updatedAt
+  isActive            Boolean               @default(false)
+  isVerified          Boolean               @default(false)
+  Transactions        Transactions[]
+  DailyTransactions   DailyTransactions[]
+  MonthlyTransactions MonthlyTransactions[]
+  Categories          Categories[]
+  Token_UID           Tokens[]              @relation("user_uID_relation")
+  Token_UUID          Tokens[]              @relation("user_UUID_relation")
+  Activation          Activation?
+  ForgotPassword      ForgotPassword[]
+}
+
+model Activation {
+  id             Int      @id @unique @default(autoincrement())
+  userID         Int      @unique @db.UnsignedInt
+  userRelation   Users    @relation(references: [id], fields: [userID])
+  activationCode String   @unique @default(uuid())
+  expiresOn      DateTime
+  isUsed         Boolean  @default(false)
+  createdAt      DateTime @default(now()) @db.Timestamp()
+  modifiedAt     DateTime @updatedAt
+}
+
+model ForgotPassword {
+  id           Int      @id @unique @default(autoincrement())
+  userID       Int      @db.UnsignedInt
+  userRelation Users    @relation(references: [id], fields: [userID])
+  code         String   @db.VarChar(6)
+  expiresOn    DateTime
+  isUsed       Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.Timestamp()
+  modifiedAt   DateTime @updatedAt
+}
+
+model Tokens {
+  id                 Int      @id @default(autoincrement()) @db.UnsignedInt
+  Token              String   @unique @db.VarChar(255)
+  expiresOn          DateTime
+  createdAt          DateTime @default(now())
+  isActive           Boolean  @default(true)
+  UUID               String
+  userID             Int      @db.UnsignedInt
+  user_UUID_relation Users    @relation("user_UUID_relation", references: [UUID], fields: [UUID])
+  user_uID_relation  Users    @relation("user_uID_relation", references: [id], fields: [userID])
+}
+
+model Categories {
+  id                  Int                   @id @unique @default(autoincrement()) @db.UnsignedInt
+  categoryName        String
+  userID              Int                   @db.UnsignedInt
+  user                Users                 @relation(references: [id], fields: [userID])
+  createdAt           DateTime              @default(now()) @db.Timestamp()
+  modifiedAt          DateTime              @updatedAt
+  Transactions        Transactions[]
+  DailyTransactions   DailyTransactions[]
+  MonthlyTransactions MonthlyTransactions[]
+}
+
+model Transactions {
+  id         Int         @id @unique @default(autoincrement()) @db.UnsignedInt
+  amount     Decimal     @db.Decimal(15, 3)
+  type       WALLETSTYPE @default(EXPENSES)
+  categoryID Int         @db.UnsignedInt
+  category   Categories  @relation(references: [id], fields: [categoryID])
+  userID     Int         @db.UnsignedInt
+  user       Users       @relation(references: [id], fields: [userID])
+  date       DateTime
+  createdAt  DateTime    @default(now()) @db.Timestamp()
+  modifiedAt DateTime    @updatedAt
+}
+
+model DailyTransactions {
+  id         Int         @id @unique @default(autoincrement()) @db.UnsignedInt
+  amount     Decimal     @db.Decimal(15, 3)
+  type       WALLETSTYPE @default(EXPENSES)
+  categoryID Int         @db.UnsignedInt
+  category   Categories  @relation(references: [id], fields: [categoryID])
+  userID     Int         @db.UnsignedInt
+  user       Users       @relation(references: [id], fields: [userID])
+  date       DateTime
+  createdAt  DateTime    @default(now()) @db.Timestamp()
+  modifiedAt DateTime    @updatedAt
+}
+
+model MonthlyTransactions {
+  id         Int         @id @unique @default(autoincrement()) @db.UnsignedInt
+  amount     Decimal     @db.Decimal(15, 3)
+  type       WALLETSTYPE @default(EXPENSES)
+  categoryID Int         @db.UnsignedInt
+  category   Categories  @relation(references: [id], fields: [categoryID])
+  userID     Int         @db.UnsignedInt
+  user       Users       @relation(references: [id], fields: [userID])
+  monthYear  DateTime
+  createdAt  DateTime    @default(now()) @db.Timestamp()
+  modifiedAt DateTime    @updatedAt
+}
+
+enum WALLETSTYPE {
+  INCOME
+  EXPENSES
+}
