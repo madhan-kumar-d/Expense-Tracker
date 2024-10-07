@@ -80,4 +80,12 @@ transactionsRouter.delete(
   ],
   errorHandler(transactionsController.delete)
 );
-// transactionsRouter.post('/:id', [errorHandler(userMiddleware)]);
+transactionsRouter.patch(
+  '/:id',
+  [
+    errorHandler(userMiddleware),
+    errorHandler(validate(transactionsSchema.create)),
+    errorHandler(getValidate(transactionsSchema.select))
+  ],
+  errorHandler(transactionsController.update)
+);

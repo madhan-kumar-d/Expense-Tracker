@@ -91,8 +91,33 @@ export const transactionsController = {
       findTransactionsByID.userID,
       findTransactionsByID.date,
       amount,
+      findTransactionsByID.categoryID,
       findTransactionsByID.type
     );
+    res.status(statusCode.OK).json({
+      data: transactions,
+      status: 'success'
+    });
+  },
+  update: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { id: userID } = req.users;
+    const { amount, categoryID, type, date } = req.body;
+    const existTransactions = await transactionsModel.findTransactionsByID(
+      parseInt(id),
+      userID
+    );
+    if (!existTransactions) {
+      throw new InvalidInput(customErrorCode.NoDataFound, null);
+    }
+    const transactions = await transactionsModel.update(parseInt(id), {
+      categoryID,
+      amount,
+      type,
+      date,
+      userID
+    });
+
     res.status(statusCode.OK).json({
       data: transactions,
       status: 'success'

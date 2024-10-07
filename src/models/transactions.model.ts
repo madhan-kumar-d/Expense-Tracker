@@ -87,14 +87,62 @@ export const transactionsModel = {
         date: transactionDate
       }
     });
-
+    this.addTransactions(transactions);
+  },
+  update: async function (id: number, transactions: transactionsType) {
+    const { userID, date, amount, categoryID, type } = transactions;
+    const existTransactions = await this.findTransactionsByID(id, userID);
+    const amountInt = +existTransactions!.amount;
+    await this.minusTransactions(userID, date, amountInt, categoryID, type);
+    const transactionDate = new Date(transactions.date);
+    const transactionsData = await prismaClient.transactions.update({
+      data: {
+        amount: transactions.amount,
+        categoryID: transactions.categoryID,
+        userID: transactions.userID,
+        type: transactions.type,
+        date: transactionDate
+      },
+      where: {
+        id
+      }
+    });
+    await this.addTransactions(transactions);
+    return transactionsData;
+  },
+  delete: async function (
+    id: number,
+    userID: number,
+    date: Date,
+    amount: number,
+    categoryID: number,
+    type: transactionsType['type']
+  ) {
+    await this.minusTransactions(userID, date, amount, categoryID, type);
+    return prismaClient.transactions.delete({
+      where: {
+        id
+      }
+    });
+  },
+  findTransactionsByID: async (id: number, userID: number) => {
+    return prismaClient.transactions.findUnique({
+      where: {
+        id,
+        userID
+      }
+    });
+  },
+  addTransactions: async function (transactions: transactionsType) {
+    console.log('test', transactions);
+    const transactionDate = new Date(transactions.date);
     const dailyDate = commonUtil.getMidNightTimeStart(transactionDate);
     const existDaily = await this.findDailyTransactions(
       dailyDate,
       transactions.userID,
       transactions.type
     );
-
+    console.log(existDaily, 'Testing');
     if (existDaily) {
       await prismaClient.dailyTransactions.update({
         where: {
@@ -145,33 +193,11 @@ export const transactionsModel = {
       });
     }
   },
-  delete: async function (
-    id: number,
-    userID: number,
-    date: Date,
-    amount: number,
-    type: transactionsType['type']
-  ) {
-    await this.minusTransactions(userID, date, amount, type);
-    return prismaClient.transactions.delete({
-      where: {
-        id
-      }
-    });
-  },
-  findTransactionsByID: async (id: number, userID: number) => {
-    return prismaClient.transactions.findUnique({
-      where: {
-        id,
-        userID
-      }
-    });
-  },
-
   minusTransactions: async function (
     userID: number,
     date: Date,
     amount: number,
+    categoryID: number,
     type: transactionsType['type']
   ) {
     const dailyDate = commonUtil.getMidNightTimeStart(new Date(date));
@@ -181,11 +207,14 @@ export const transactionsModel = {
       where: {
         date: dailyDate,
         type,
-        userID
+        userID,
+        categoryID
       }
     });
+    console.log(getDaily);
     if (getDaily) {
       const updatedAmount = Math.max(+getDaily.amount - amount, 0);
+      console.log('get', getDaily);
       await prismaClient.dailyTransactions.update({
         where: {
           id: getDaily.id
@@ -199,7 +228,8 @@ export const transactionsModel = {
       where: {
         monthYear,
         type,
-        userID
+        userID,
+        categoryID
       }
     });
 
