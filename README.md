@@ -1,10 +1,31 @@
-Another Node js Express Applications with prisma ORM
+<h1 align="center">Another Node js Express Applications with prisma ORM</h1>
 
-1. To migrate Prisma  :
-   ````bash npx prisma migrate deploy````
-2. To run Dev :
-   ````bash npm run dev ````
-3. To Build:
-   ````bash npm run build ````
-4. Then Start
-   ````bash npm start ````
+## To migrate Prisma :
+
+```sh
+npx prisma migrate deploy
+```
+
+## Install Package :
+
+```sh
+npx yarn install
+```
+
+## To run Dev :
+
+```sh
+npm run dev
+```
+
+## To Build:
+
+```sh
+npm run build
+```
+
+## Then Start
+
+```sh
+npm start
+```
