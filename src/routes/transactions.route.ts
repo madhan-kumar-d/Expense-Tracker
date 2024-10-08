@@ -1,13 +1,13 @@
-import { Request, Response, Router } from 'express';
-import { categoryController, transactionsController } from 'src/controller';
-import { errorHandler } from 'src/errorHandler';
+import { Router } from 'express';
+import { categoryController, transactionsController } from '../controller';
+import { errorHandler } from '../errorHandler';
 import {
   getValidate,
   queryValidate,
   userMiddleware,
   validate
-} from 'src/middleware';
-import { CategorySchema, transactionsSchema } from 'src/schema';
+} from '../middleware';
+import { CategorySchema, transactionsSchema } from '../schema';
 
 export const transactionsRouter = Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { customErrorCode, InvalidInput, statusCode } from 'src/exception';
-import { categoryModel, transactionsModel } from 'src/models';
-import { getTransactions } from 'src/types';
+import { customErrorCode, InvalidInput, statusCode } from '../exception';
+import { categoryModel, transactionsModel } from '../models';
+import { getTransactions } from '../types';
 
 export const transactionsController = {
   create: async (req: Request, res: Response) => {

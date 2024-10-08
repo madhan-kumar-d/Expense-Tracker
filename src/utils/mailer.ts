@@ -1,6 +1,6 @@
 import { createTransport } from 'nodemailer';
-import secrets from 'src/secrets';
-import { emailDataType } from 'src/types';
+import secrets from '../secrets';
+import { emailDataType } from '../types';
 
 export const mailer = () => {};
 

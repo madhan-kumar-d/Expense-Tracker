@@ -11,7 +11,7 @@ import { compare, hash } from 'bcrypt';
 import { authUtils, commonUtil, sendMail } from '../utils';
 import secrets from '../secrets';
 import { unauthorizedException } from '../exception/unauthorized';
-import { resetPassword } from 'src/template';
+import { resetPassword } from '../template';
 
 export const authController = {
   register: async (req: Request, res: Response, next: NextFunction) => {
@@ -190,7 +190,7 @@ export const authController = {
     console.log(isActive);
     if (!isActive) {
       if (findCode.isUsed) {
-        res.redirect(
+        return res.redirect(
           '/login?message=Account is Already Activated, Please Login'
         );
         // res.status(statusCode.OK).json({

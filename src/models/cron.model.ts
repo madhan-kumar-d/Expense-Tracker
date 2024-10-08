@@ -1,4 +1,4 @@
-import { prismaClient } from 'src';
+import { prismaClient } from '../';
 
 export const cronModel = {
   removeToken: () => {

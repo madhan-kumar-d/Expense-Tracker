@@ -3,7 +3,7 @@ import secrets from '../secrets';
 import { type Users } from '@prisma/client';
 import { activationModel, tokenModel } from '../models/auth.model';
 import { sendMail } from '.';
-import { verifyEmail } from 'src/template';
+import { verifyEmail } from '../template';
 import { Request } from 'express';
 import { v7 as uuid } from 'uuid';
 

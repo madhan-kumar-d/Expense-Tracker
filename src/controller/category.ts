@@ -4,8 +4,8 @@ import {
   customErrorCode,
   InvalidInput,
   statusCode
-} from 'src/exception';
-import { categoryModel } from 'src/models';
+} from '../exception';
+import { categoryModel } from '../models';
 
 export const categoryController = {
   get: async (req: Request, res: Response) => {

@@ -1,6 +1,6 @@
-import { prismaClient } from 'src';
-import { type getTransactionsQuery, type transactionsType } from 'src/types';
-import { commonUtil } from 'src/utils';
+import { prismaClient } from '../';
+import { type getTransactionsQuery, type transactionsType } from '../types';
+import { commonUtil } from '../utils';
 
 export const categoryModel = {
   get: (userID: number) => {

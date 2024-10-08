@@ -1,12 +1,11 @@
 {
   "name": "expensetracker",
   "version": "1.0.0",
-  "description": "Simele node js application",
-  "type": "module",
+  "description": "Simple node js application",
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node build/index.js",
     "dev": "nodemon",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
@@ -48,7 +47,7 @@
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
-    "tsx": "^4.17.0",
+    "tsx": "^4.19.1",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.2.0"
   },
