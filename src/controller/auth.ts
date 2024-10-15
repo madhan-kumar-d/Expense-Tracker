@@ -12,6 +12,7 @@ import { authUtils, commonUtil, sendMail } from '../utils';
 import secrets from '../secrets';
 import { unauthorizedException } from '../exception/unauthorized';
 import { resetPassword } from '../template';
+import { userResponse } from 'src/types';
 
 export const authController = {
   register: async (req: Request, res: Response, next: NextFunction) => {
@@ -131,16 +132,11 @@ export const authController = {
   },
 
   me: async (req: Request, res: Response) => {
-    const { userID, Email, dob, createdAt, isVerified } = req.users;
+    // const { UUID: userID, Email, dob, createdAt, isVerified }: userResponse =
+    const userResponse: userResponse = req.users;
     res
       .json({
-        data: {
-          userID,
-          Email,
-          dob,
-          createdAt,
-          isVerified
-        },
+        data: userResponse,
         status: 'Success'
       })
       .status(statusCode.OK);

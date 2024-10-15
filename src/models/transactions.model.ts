@@ -254,35 +254,23 @@ export const transactionsModel = {
     perPage: take = 10
   }: getTransactionsQuery) => {
     const skip = (page - 1) * take;
-    const query = [];
-    if (type) {
-      query.push({
-        type
-      });
-    }
-    if (userID) {
-      query.push({
-        userID
-      });
-    }
-    if (categoryID) {
-      categoryID = +categoryID;
-      query.push({
-        categoryID
-      });
-    }
-    if (date) {
-      const startDate = commonUtil.getMidNightTimeStart(new Date(date));
-      const endDate = commonUtil.getMidNightTimeEnd(new Date(date));
-      query.push({
-        date: {
-          gte: startDate,
-          lte: endDate
-        }
-      });
-    }
+
     const data = await prismaClient.transactions.findMany({
-      where: query.length > 0 ? { AND: query } : undefined,
+      where: {
+        categoryID,
+        userID,
+        type,
+        date: date
+          ? (() => {
+              const startDate = commonUtil.getMidNightTimeStart(new Date(date));
+              const endDate = commonUtil.getMidNightTimeEnd(new Date(date));
+              return {
+                gte: startDate,
+                lte: endDate
+              };
+            })()
+          : undefined
+      },
       take: +take,
       skip,
       orderBy: {
@@ -290,7 +278,21 @@ export const transactionsModel = {
       }
     });
     const count = await prismaClient.transactions.count({
-      where: query.length > 0 ? { AND: query } : undefined
+      where: {
+        categoryID,
+        userID,
+        type,
+        date: date
+          ? (() => {
+              const startDate = commonUtil.getMidNightTimeStart(new Date(date));
+              const endDate = commonUtil.getMidNightTimeEnd(new Date(date));
+              return {
+                gte: startDate,
+                lte: endDate
+              };
+            })()
+          : undefined
+      }
     });
     return { data, count };
   },
@@ -303,31 +305,18 @@ export const transactionsModel = {
     perPage: take = 10
   }: getTransactionsQuery) => {
     const skip = (page - 1) * take;
-    const query = [];
-    if (type) {
-      query.push({
-        type
-      });
-    }
-    if (userID) {
-      query.push({
-        userID
-      });
-    }
-    if (categoryID) {
-      categoryID = +categoryID;
-      query.push({
-        categoryID
-      });
-    }
-    if (date) {
-      const startDate = commonUtil.getMidNightTimeStart(new Date(date));
-      query.push({
-        date: startDate
-      });
-    }
     const data = await prismaClient.dailyTransactions.findMany({
-      where: query.length > 0 ? { AND: query } : undefined,
+      where: {
+        categoryID,
+        userID,
+        type,
+        date: date
+          ? (() => {
+              const startDate = commonUtil.getMidNightTimeStart(new Date(date));
+              return startDate;
+            })()
+          : undefined
+      },
       take: +take,
       skip,
       orderBy: {
@@ -335,7 +324,17 @@ export const transactionsModel = {
       }
     });
     const count = await prismaClient.dailyTransactions.count({
-      where: query.length > 0 ? { AND: query } : undefined
+      where: {
+        categoryID,
+        userID,
+        type,
+        date: date
+          ? (() => {
+              const startDate = commonUtil.getMidNightTimeStart(new Date(date));
+              return startDate;
+            })()
+          : undefined
+      }
     });
     return { data, count };
   },
@@ -348,32 +347,19 @@ export const transactionsModel = {
     perPage: take = 10
   }: getTransactionsQuery) => {
     const skip = (page - 1) * take;
-    const query = [];
-    if (type) {
-      query.push({
-        type
-      });
-    }
-    if (userID) {
-      query.push({
-        userID
-      });
-    }
-    if (categoryID) {
-      categoryID = +categoryID;
-      query.push({
-        categoryID
-      });
-    }
-    if (date) {
-      const monthYear = new Date(date);
-      monthYear.setDate(1);
-      query.push({
-        monthYear: monthYear
-      });
-    }
     const data = await prismaClient.monthlyTransactions.findMany({
-      where: query.length > 0 ? { AND: query } : undefined,
+      where: {
+        categoryID,
+        userID,
+        type,
+        monthYear: date
+          ? (() => {
+              const monthYear = new Date(date);
+              monthYear.setDate(1);
+              return monthYear;
+            })()
+          : undefined
+      },
       take: +take,
       skip,
       orderBy: {
@@ -381,7 +367,18 @@ export const transactionsModel = {
       }
     });
     const count = await prismaClient.monthlyTransactions.count({
-      where: query.length > 0 ? { AND: query } : undefined
+      where: {
+        categoryID,
+        userID,
+        type,
+        monthYear: date
+          ? (() => {
+              const monthYear = new Date(date);
+              monthYear.setDate(1);
+              return monthYear;
+            })()
+          : undefined
+      }
     });
     return { data, count };
   },

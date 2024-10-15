@@ -10,11 +10,13 @@ export const transactionsSchema = {
     date: Joi.date().required().min('01-01-1990 00:00:00')
   }),
   get: Joi.object({
-    categoryID: Joi.number(),
-    type: Joi.string().valid(...Object.values(WALLETSTYPE)),
-    date: Joi.date().min('01-01-1990'),
-    page: Joi.number(),
-    perPage: Joi.number()
+    categoryID: Joi.number().optional(),
+    type: Joi.string()
+      .valid(...Object.values(WALLETSTYPE))
+      .optional(),
+    date: Joi.date().min('01-01-1990').optional(),
+    page: Joi.number().optional(),
+    perPage: Joi.number().optional()
   }),
   select: Joi.object({
     id: Joi.number()
