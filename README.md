@@ -1,17 +1,16 @@
 <h1 align="center">Another Node js Express Applications with prisma ORM</h1>
 
-## To migrate Prisma :
-
-```sh
-npx prisma migrate deploy
-```
-
 ## Install Package :
 
 ```sh
 npx yarn install
 ```
 
+## To migrate Prisma :
+
+```sh
+npx prisma migrate deploy
+```
 ## To run Dev :
 
 ```sh
