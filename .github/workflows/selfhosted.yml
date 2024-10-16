@@ -88,4 +88,4 @@ jobs:
             --restart=always \
             --env-file .env \
             -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            ${{ secrets.DOCKER_USER }}/${{ secrets.DOCKER_REPO }}:latest
