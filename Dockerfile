@@ -18,10 +18,12 @@ ENV NODE_ENV=production
 
 EXPOSE 3001
 
-RUN mkdir -p /migrations_state
+RUN mkdir -p /app/migrations_state
 
-RUN if [ ! -f /app/migrations_state/migrations.lock ]; then \
-      npx prisma migrate deploy && touch /usr/src/app/migrations_state/migrations.lock; \
-    fi
+# Entrypoint script to run migrations and start the application - created with Chatgpt
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
 
 CMD ['npm', 'start']
