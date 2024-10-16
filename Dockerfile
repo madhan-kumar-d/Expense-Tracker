@@ -26,4 +26,4 @@ RUN chmod +x /app/entrypoint.sh
 
 CMD ["/app/entrypoint.sh"]
 
-CMD ['npm', 'start']
+CMD ["npm", "start"]
