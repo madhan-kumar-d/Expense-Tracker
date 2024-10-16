@@ -1,5 +1,8 @@
 FROM node:22-slim
 
+# Install OpenSSL
+RUN apt-get update && apt-get install -y openssl
+
 WORKDIR /app
 
 COPY package*.json .
